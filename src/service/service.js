@@ -10,7 +10,6 @@ const [userCommand] = userArguments;
   try {
     if (userArguments.length === 0 || !Cli[userCommand]) {
       await Cli[DEFAULT_COMMAND].run();
-      process.exit(ExitCode.SUCCESS);
     }
     await Cli[userCommand].run(userArguments.slice(1));
   } catch
