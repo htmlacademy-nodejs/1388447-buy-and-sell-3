@@ -1,5 +1,6 @@
 'use strict';
 
+const chalk = require('chalk');
 const {ExitCode, USER_ARGV_INDEX, DEFAULT_COMMAND} = require('../constants');
 const {Cli} = require('./cli');
 
@@ -14,7 +15,7 @@ const [userCommand] = userArguments;
     await Cli[userCommand].run(userArguments.slice(1));
   } catch
     (err) {
-    console.error(err);
+    console.error(chalk.red(err));
     process.exit(ExitCode.ERROR);
   }
 })();

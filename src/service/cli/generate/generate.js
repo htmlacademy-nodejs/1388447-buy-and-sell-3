@@ -2,6 +2,7 @@
 
 const fs = require(`fs/promises`);
 const {getRandomInt, shuffle} = require(`../../../utils`);
+const chalk = require('chalk');
 
 const DEFAULT_COUNT = 1;
 const MAX_COUNT = 1000;
@@ -62,6 +63,8 @@ module.exports = {
 
     try {
       await fs.writeFile(FILE_NAME, content);
+      console.log(chalk.green(`Operation success. File created.`));
+
     } catch (err) {
       throw new Error(`Что-то пошло не так ...`);
     }
