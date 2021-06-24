@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs/promises`);
-const {getRandomInt, shuffle} = require(`../../../utils`);
+const {getRandomInt, shuffle} = require(`../../utils`);
 const chalk = require('chalk');
 
 const DEFAULT_COUNT = 1;

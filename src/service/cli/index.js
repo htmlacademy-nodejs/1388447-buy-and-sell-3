@@ -1,8 +1,8 @@
 'use strict';
 
-const version = require('./version/version');
-const help = require('./help/help');
-const generate = require('./generate/generate');
+const version = require('./version');
+const help = require('./help');
+const generate = require('./generate');
 
 const Cli = {
   [version.name]: version,

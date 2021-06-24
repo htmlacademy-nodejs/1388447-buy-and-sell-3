@@ -1,7 +1,7 @@
 'use strict';
 
-const {name: version} = require('../version/version');
-const {name: generate} = require('../generate/generate');
+const {name: version} = require('./version');
+const {name: generate} = require('./generate');
 const chalk = require('chalk');
 
 module.exports = {
