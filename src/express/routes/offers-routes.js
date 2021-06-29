@@ -1,13 +1,15 @@
 "use strict";
 
-const { Router } = require(`express`);
+const { Router } = require("express");
 
-const offersRouter = new Router();
+const offersRoutes = new Router();
 
-offersRouter.get(`/`, (req, res) => res.end(`/offers`));
-offersRouter.get(`/:id`, (req, res) => res.end(`/offers/:id`));
-offersRouter.get(`/add`, (req, res) => res.end(`/offers/add`));
-offersRouter.get(`/category/:id`, (req, res) =>
+offersRoutes.get(`/`, (req, res) => res.end(`/offers`));
+offersRoutes.get(`/:id`, (req, res) => res.end(`/offers/:id`));
+offersRoutes.get(`/add`, (req, res) => res.end(`/offers/add`));
+offersRoutes.get(`/category/:id`, (req, res) =>
   res.end(`/offers/category/:id`)
 );
-offersRouter.get(`/edit/:id`, (req, res) => res.end(`/offers/edit/:id`));
+offersRoutes.get(`/edit/:id`, (req, res) => res.end(`/offers/edit/:id`));
+
+module.exports = offersRoutes;
