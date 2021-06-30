@@ -1,9 +1,9 @@
 'use strict';
 
-const {name: version} = require('./version');
-const {name: generate} = require('./generate');
-const {name: server} = require('./server');
-const chalk = require('chalk');
+const {name: version} = require(`./version`);
+const {name: generate} = require(`./generate`);
+const {name: server} = require(`./server`);
+const chalk = require(`chalk`);
 
 module.exports = {
   name: `--help`,
@@ -22,4 +22,4 @@ module.exports = {
     `
     ));
   }
-}
+};

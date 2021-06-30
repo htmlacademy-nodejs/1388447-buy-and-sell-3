@@ -1,9 +1,9 @@
 'use strict';
 
-const http = require('http');
-const fs = require('fs/promises');
-const chalk = require('chalk');
-const {HttpCode, DEFAULT_PORT, MOCKS_FILE_PATH, Route} = require('../../constants');
+const http = require(`http`);
+const fs = require(`fs/promises`);
+const chalk = require(`chalk`);
+const {HttpCode, DEFAULT_PORT, MOCKS_FILE_PATH, Route} = require(`../../constants`);
 
 const sendResponse = (res, statusCode, content) => {
   const template = `
@@ -53,4 +53,4 @@ module.exports = {
     server.on(`listening`, () => console.log(chalk.green(`Waiting for connection on ${port}`)));
     server.on(`error`, ({message}) => console.error(`Server creation error: ${message}`));
   },
-}
+};
