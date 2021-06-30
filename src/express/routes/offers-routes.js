@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
-const { Router } = require("express");
+const {Router} = require(`express`);
 
 const offersRoutes = new Router();
 
-offersRoutes.get(`/`, (req, res) => res.end(`/offers`));
-offersRoutes.get(`/:id`, (req, res) => res.end(`/offers/:id`));
-offersRoutes.get(`/add`, (req, res) => res.end(`/offers/add`));
+offersRoutes.get(`/`, (req, res) => res.render(`ticket`));
+offersRoutes.get(`/:id`, (req, res) => res.render(`ticket`));
+offersRoutes.get(`/add`, (req, res) => res.render(`new-ticket`));
 offersRoutes.get(`/category/:id`, (req, res) =>
-  res.end(`/offers/category/:id`)
+  res.render(`category`)
 );
-offersRoutes.get(`/edit/:id`, (req, res) => res.end(`/offers/edit/:id`));
+offersRoutes.get(`/edit/:id`, (req, res) => res.render(`ticket-edit`));
 
 module.exports = offersRoutes;
