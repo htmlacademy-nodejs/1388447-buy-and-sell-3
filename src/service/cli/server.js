@@ -2,12 +2,13 @@
 
 const express = require(`express`);
 const chalk = require(`chalk`);
-const {DEFAULT_PORT} = require(`../../constants`);
-const offersRouts = require(`./routs`);
+const {DEFAULT_PORT, API_PREFIX} = require(`../../constants`);
+const routes = require(`../api`);
 
-const server = express();
-server.use(express.json());
-server.use(`/offers`, offersRouts);
+const app = express();
+
+app.use(express.json());
+app.use(API_PREFIX, routes);
 
 module.exports = {
   name: `--server`,
@@ -15,7 +16,7 @@ module.exports = {
     const [customPort] = args;
     const port = +customPort || DEFAULT_PORT;
 
-    server.listen(port, () => console.info(chalk.green(`Waiting for connection on ${port}`)));
-    server.on(`error`, ({message}) => console.error(`Server creation error: ${message}`));
+    app.listen(port, () => console.info(chalk.green(`Waiting for connection on ${port}`)));
+    app.on(`error`, ({message}) => console.error(`Server creation error: ${message}`));
   },
 };

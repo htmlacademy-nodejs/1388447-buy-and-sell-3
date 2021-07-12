@@ -7,13 +7,18 @@ const getRandomInt = (min, max) => {
 };
 
 const shuffle = (someArray) => {
-  const copyArray = [...someArray];
-  for (let i = copyArray.length - 1; i > 0; i--) {
+  for (let i = someArray.length - 1; i > 0; i--) {
     const randomPosition = Math.floor(Math.random() * i);
-    [copyArray[i], copyArray[randomPosition]] = [copyArray[randomPosition], copyArray[i]];
+    [someArray[i], someArray[randomPosition]] = [someArray[randomPosition], someArray[i]];
   }
 
   return someArray;
 };
 
-module.exports = {getRandomInt, shuffle};
+const extend = (...rest) => {
+  const objects = rest.filter((object) =>  typeof object === `object`);
+  return Object.assign({}, ...objects);
+};
+
+
+module.exports = {getRandomInt, shuffle, extend};
