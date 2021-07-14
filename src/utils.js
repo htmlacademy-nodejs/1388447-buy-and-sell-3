@@ -16,7 +16,7 @@ const shuffle = (someArray) => {
 };
 
 const extend = (...rest) => {
-  const objects = rest.filter((object) =>  typeof object === `object`);
+  const objects = rest.filter((object) => typeof object === `object`);
   return Object.assign({}, ...objects);
 };
 

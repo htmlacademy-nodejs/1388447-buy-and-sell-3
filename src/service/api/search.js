@@ -10,19 +10,19 @@ module.exports = (app, service) => {
 
   router.get(`/`, (req, res) => {
     const {query = ``} = req.query;
-    if(!query) {
-      res.status(HttpCode.BAD_REQUEST)
+    if (!query) {
+      return res.status(HttpCode.BAD_REQUEST)
         .json([]);
     }
 
     const result = service.findOffer(query);
 
-    if(!result) {
+    if (!result) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Query ${query} not found`);
     }
 
-    res.status(HttpCode.OK)
+    return res.status(HttpCode.OK)
       .json(result);
-  })
+  });
 };

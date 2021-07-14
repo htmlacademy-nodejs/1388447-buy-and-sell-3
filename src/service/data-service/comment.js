@@ -11,7 +11,7 @@ class Comment {
   }
 
   findOne(id, offer) {
-    const comment = offer.comments.find((comment) => comment.id === id);
+    const comment = offer.comments.find((item) => item.id === id);
 
     if (!comment) {
       return null;
@@ -20,20 +20,20 @@ class Comment {
   }
 
   create(comment, offer) {
-    const newComment = extend({id: nanoid(MAX_LENGTH_ID)}, comment)
+    const newComment = extend({id: nanoid(MAX_LENGTH_ID)}, comment);
     offer.comments.push(newComment);
 
     return newComment;
   }
 
   remove(id, offer) {
-    const comment = offer.comments.filter((comment) => comment.id === id);
+    const comment = offer.comments.filter((item) => item.id === id);
 
     if (!comment) {
       return null;
     }
 
-    offer.comments = offer.comments.filter((comment) => comment.id !== id);
+    offer.comments = offer.comments.filter((item) => item.id !== id);
 
     return comment;
   }

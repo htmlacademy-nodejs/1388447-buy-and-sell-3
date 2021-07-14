@@ -14,7 +14,7 @@ class Search {
   }
 
   findByCategory(query) {
-    const offer = this._offers.find((offer) => offer.category.find((category) => category.includes(query)));
+    const offer = this._offers.find((item) => item.category.find((category) => category.includes(query)));
     if (!offer) {
       return null;
     }
@@ -22,16 +22,16 @@ class Search {
   }
 
   findByDescription(query) {
-    const offer = this._offers.find((offer) => offer.description.includes(query));
-    if(!offer) {
+    const offer = this._offers.find((item) => item.description.includes(query));
+    if (!offer) {
       return null;
     }
     return offer;
   }
 
   findByTitle(query) {
-    const offer = this._offers.find((offer) => offer.title.includes(query));
-    if(!offer) {
+    const offer = this._offers.find((item) => item.title.includes(query));
+    if (!offer) {
       return null;
     }
     return offer;

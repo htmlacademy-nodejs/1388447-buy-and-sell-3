@@ -31,7 +31,7 @@ module.exports = (app, offerService, commentService) => {
     const offer = offerService.create(req.body);
 
     res.status(HttpCode.CREATED)
-      .json(offer)
+      .json(offer);
   });
 
   router.put(`/:offerId`, offerValidator, (req, res) => {
