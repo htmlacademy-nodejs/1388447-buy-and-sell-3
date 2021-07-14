@@ -10,9 +10,9 @@ module.exports = (req, res, next) => {
   const keysExist = commentKeys.every((key) => keys.includes(key));
 
   if (!keysExist) {
-    res.status(HttpCode.BAD_REQUEST)
+    return res.status(HttpCode.BAD_REQUEST)
       .send(`Bad request`);
   }
 
-  next();
+  return next();
 };
