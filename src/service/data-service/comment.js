@@ -27,9 +27,9 @@ class Comment {
   }
 
   remove(id, offer) {
-    const comment = offer.comments.filter((item) => item.id === id);
+    const [comment] = offer.comments.filter((item) => item.id === id);
 
-    if (!comment) {
+    if (!comment || comment.length === 0) {
       return null;
     }
 

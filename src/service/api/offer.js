@@ -33,7 +33,7 @@ module.exports = (app, offerService, commentService) => {
       .json(offer);
   });
 
-  router.put(`/:offerId`, offerValidator, (req, res) => {
+  router.put(`/:offerId`, [offerValidator, offerExist(offerService)], (req, res) => {
     const {offerId} = req.params;
     const offer = offerService.upDate(offerId, req.body);
 

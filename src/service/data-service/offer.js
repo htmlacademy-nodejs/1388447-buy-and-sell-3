@@ -17,9 +17,9 @@ class Offer {
   }
 
   remove(id) {
-    const offer = this._offers.filter((item) => item.id === id);
+    const [offer] = this._offers.filter((item) => item.id === id);
 
-    if (!offer) {
+    if (!offer || offer.length === 0) {
       return null;
     }
 
@@ -43,9 +43,12 @@ class Offer {
   }
 
   upDate(id, offer) {
-    const oldOffer = this._offers.find((item) => item.id === id);
+    const index = this._offers.findIndex((item) => item.id === id);
+    const upDatedOffer = extend(this._offers[index], offer);
 
-    return extend(oldOffer, offer);
+    this._offers = [...this._offers.slice(0, index), upDatedOffer, ...this._offers.slice(index + 1)];
+
+    return upDatedOffer;
   }
 
 }
