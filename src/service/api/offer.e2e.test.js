@@ -9,38 +9,38 @@ const {HttpCode} = require(`../../constants`);
 
 const mockData = [
   {
-    "id": "v2O83t",
+    "id": `v2O83t`,
     "category": [
-      "Животные",
-      "Книги",
-      "Журналы"
+      `Животные`,
+      `Книги`,
+      `Журналы`
     ],
-    "description": "Даю недельную гарантию. Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города. Продаю с болью в сердце...",
-    "picture": "item07.jpg",
-    "title": "Продам отличную подборку фильмов на VHS.",
-    "type": "OFFER",
+    "description": `Даю недельную гарантию. Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города. Продаю с болью в сердце...`,
+    "picture": `item07.jpg`,
+    "title": `Продам отличную подборку фильмов на VHS.`,
+    "type": `OFFER`,
     "sum": 43399,
     "comments": [
       {
-        "id": "eHLMYT",
-        "text": "С чем связана продажа? Почему так дешёво? Неплохо но дорого Совсем немного... Вы что?! В магазине дешевле."
+        "id": `eHLMYT`,
+        "text": `С чем связана продажа? Почему так дешёво? Неплохо но дорого Совсем немного... Вы что?! В магазине дешевле.`
       }
     ]
   },
   {
-    "id": "v3194t",
+    "id": `v3194t`,
     "category": [
-      "Книги"
+      `Книги`
     ],
-    "description": "Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города.",
-    "picture": "item07.jpg",
-    "title": "Продам подборку фильмов.",
-    "type": "OFFER",
+    "description": `Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города.`,
+    "picture": `item07.jpg`,
+    "title": `Продам подборку фильмов.`,
+    "type": `OFFER`,
     "sum": 13309,
     "comments": [
       {
-        "id": "rFLMYB",
-        "text": "Почему так дешёво? В магазине дешевле."
+        "id": `rFLMYB`,
+        "text": `Почему так дешёво? В магазине дешевле.`
       }
     ]
   }
@@ -69,7 +69,7 @@ describe(`API returns a list of all offers`, () => {
 
   test(`Returns a list of 2 offers`, () => expect(response.body.length).toBe(2));
 
-  test(`First offer's id equals "v2O83t"`, () => expect(response.body[0].id).toBe("v2O83t"));
+  test(`First offer's id equals "v2O83t"`, () => expect(response.body[0].id).toBe(`v2O83t`));
 
 });
 
@@ -85,7 +85,7 @@ describe(`API returns an offer with given id`, () => {
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
   test(`Offer's title is "Продам отличную подборку фильмов на VHS."`, () => {
-    return expect(response.body.title).toBe("Продам отличную подборку фильмов на VHS.");
+    return expect(response.body.title).toBe(`Продам отличную подборку фильмов на VHS.`);
   });
 });
 
@@ -104,7 +104,7 @@ describe(`API creates an offer if data is valid`, () => {
   let response;
 
   beforeAll(async () => {
-   response = await request(app)
+    response = await request(app)
       .post(`/offers`)
       .send(newOffer);
   });
@@ -226,9 +226,8 @@ describe(`API correctly deletes an offer`, () => {
 
 
   test(`Returns deleted offer`, () => {
-    expect(response.body.id).toBe(`v2O83t`)
-
-});
+    expect(response.body.id).toBe(`v2O83t`);
+  });
 
   test(`Offer count is 1 now`, () => request(app)
     .get(`/offers`)
@@ -269,4 +268,4 @@ describe(`API refuses to create of delete comment`, () => {
       .expect(HttpCode.NOT_FOUND);
 
   });
-})
+});
