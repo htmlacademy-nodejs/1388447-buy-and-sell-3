@@ -6,11 +6,12 @@ const ExitCode = {
 };
 
 const USER_ARGV_INDEX = 2;
+const LOG_FILE = `./logs/api.log`;
 const MOCKS_FILE_PATH = `mocks.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_PORT = 3000;
 const MAX_LENGTH_ID = 6;
-const API_PREFIX = `/api`;
+
 
 const HttpCode = {
   OK: 200,
@@ -22,6 +23,12 @@ const HttpCode = {
 
 const Route = {
   MAIN: `/`,
+  API: `/api`,
+};
+
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`,
 };
 
 module.exports = {
@@ -33,5 +40,6 @@ module.exports = {
   MOCKS_FILE_PATH,
   Route,
   MAX_LENGTH_ID,
-  API_PREFIX,
+  Env,
+  LOG_FILE,
 };
