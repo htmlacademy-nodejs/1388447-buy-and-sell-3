@@ -1,3 +1,6 @@
+mixin ticketLabel(type)
+  span(class!=attributes.class || `ticket-card__label`) #{type === `OFFER` ? `Куплю` : `Продам`}
+
 doctype html
 head
   meta(charset='UTF-8')
