@@ -28,15 +28,14 @@ const mockData = [
   }
 ];
 
-const app = express();
-app.use(express.json());
-search(app, new DataService(mockData));
-
 describe(`API returns offer based on search query`, () => {
 
   let response;
 
   beforeAll(async () => {
+    const app = express();
+    app.use(express.json());
+    search(app, new DataService(mockData));
     response = await request(app)
       .get(`/search`)
       .query({query: `Продам`});
@@ -47,6 +46,13 @@ describe(`API returns offer based on search query`, () => {
   test(`1 offer found`, () => expect(response.body).toEqual(mockData[0]));
 
   test(`Offer has correct id`, () => expect(response.body.id).toBe(`v2O83t`));
+
+});
+
+describe(`API returns offer based on search query`, () => {
+  const app = express();
+  app.use(express.json());
+  search(app, new DataService(mockData));
 
   test(`API return code 404 if nothing is found`, () => {
     return request(app)
@@ -60,5 +66,4 @@ describe(`API returns offer based on search query`, () => {
       .get(`/search`)
       .expect(HttpCode.BAD_REQUEST);
   });
-
 });

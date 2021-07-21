@@ -31,12 +31,7 @@ module.exports = {
         logger.error(`Route not found: ${req.url}`);
       });
 
-      app.listen(port, (err) => {
-        if (err) {
-          return logger.error(`An error occurred on server creation: ${err.message}`);
-        }
-        return logger.info(`Listening to connections on ${port}`);
-      });
+      app.listen(port, () => logger.info(`Listening to connections on ${port}`));
     } catch (err) {
       logger.error(`An error occurred: ${err.message}`);
     }
