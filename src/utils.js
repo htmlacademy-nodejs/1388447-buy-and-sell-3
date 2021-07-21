@@ -20,5 +20,6 @@ const extend = (...rest) => {
   return Object.assign({}, ...objects);
 };
 
+const ensureArray = (value) => Array.isArray(value) ? value : [value];
 
-module.exports = {getRandomInt, shuffle, extend};
+module.exports = {getRandomInt, shuffle, extend, ensureArray};
