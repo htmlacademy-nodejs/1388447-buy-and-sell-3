@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const {getAPI} = require(`../api`);
-const upload = require(`../multerConfig`);
+const upload = require(`1388447-buy-and-sell-3/src/express/multer-config`);
 const {ensureArray} = require(`../../utils`);
 
 const offersRoutes = new Router();

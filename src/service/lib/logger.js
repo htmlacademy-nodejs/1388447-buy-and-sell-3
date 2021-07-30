@@ -4,7 +4,7 @@ const pino = require(`pino`);
 const {Env, LOG_FILE} = require(`../../constants`);
 
 const isDevMode = process.env.NODE_ENV !== Env.PRODUCTION;
-const defaultLogLevel = isDevMode ? `debug` : `error`;
+const defaultLogLevel = isDevMode ? `debug` : `info`;
 
 const logger = pino({
   name: `base-logger`,
