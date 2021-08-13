@@ -3,6 +3,7 @@
 const {name: version} = require(`./version`);
 const {name: generate} = require(`./generate`);
 const {name: server} = require(`./server`);
+const {name: fill} = require(`./fill`);
 const chalk = require(`chalk`);
 
 module.exports = {
@@ -18,6 +19,7 @@ module.exports = {
     ${this.name}:          печатает этот текст
     ${generate}: <count>   формирует файл mocks.json
     ${server}: <count>     запустит сервер
+    ${fill}: <count>       формирует файл fill-db.sql
 
     `
     ));

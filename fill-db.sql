@@ -1,3 +1,4 @@
+
 INSERT INTO users(first_name, last_name, email, password_hash, avatar)
 VALUES ('Иван', 'Иванов', 'ivanov@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'avatar1.jpg'),
        ('Пётр', 'Петров', 'petrov@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'avatar2.jpg');
