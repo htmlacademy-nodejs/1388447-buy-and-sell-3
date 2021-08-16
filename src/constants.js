@@ -1,12 +1,14 @@
 'use strict';
 
+const path = require(`path`);
+
 const ExitCode = {
   SUCCESS: 0,
   ERROR: 1,
 };
 
 const USER_ARGV_INDEX = 2;
-const LOG_FILE = `./logs/api.log`;
+const LOG_FILE = `logs/api.log`;
 const MOCKS_FILE_PATH = `mocks.json`;
 const DEFAULT_COMMAND = `--help`;
 const DEFAULT_PORT = 3000;

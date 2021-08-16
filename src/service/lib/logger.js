@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require(`path`);
 const pino = require(`pino`);
 const {Env, LOG_FILE} = require(`../../constants`);
 
@@ -10,7 +11,7 @@ const logger = pino({
   name: `base-logger`,
   level: process.env.LOG_LEVEL || defaultLogLevel,
   prettyPrint: isDevMode,
-}, isDevMode ? process.env.stdout : pino.destination(LOG_FILE));
+}, isDevMode ? process.env.stdout : pino.destination(path.resolve(__dirname, LOG_FILE)));
 
 module.exports = {
   logger,
