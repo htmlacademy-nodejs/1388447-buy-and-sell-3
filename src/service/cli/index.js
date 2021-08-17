@@ -11,7 +11,7 @@ const Cli = {
   [help.name]: help,
   [generate.name]: generate,
   [server.name]: server,
-  [server.name]: fill,
+  [fill.name]: fill,
 };
 
 module.exports = {
