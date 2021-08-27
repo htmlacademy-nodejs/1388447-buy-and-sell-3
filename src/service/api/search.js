@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
+const {getLogger} = require(`../lib/logger`);
 
 module.exports = (app, service) => {
   const router = new Router();

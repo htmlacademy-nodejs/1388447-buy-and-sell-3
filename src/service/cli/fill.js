@@ -98,48 +98,59 @@ module.exports = {
     const comments = offers.flatMap((offer) => offer.comments);
     const offerCategories = offers.map((offer, index) => ({offerId: index + 1, categoryId: offer.category[0]}));
     const userValues = users.map(
-      ({email, passwordHash, firstName, lastName, avatar}) =>
-        `('${email}', '${passwordHash}', '${firstName}', '${lastName}', '${avatar}')`
+        ({email, passwordHash, firstName, lastName, avatar}) =>
+          `('${email}', '${passwordHash}', '${firstName}', '${lastName}', '${avatar}')`
     ).join(`,\n`);
 
     const categoryValues = categories.map((name) => `('${name}')`).join(`,\n`);
 
     const offerValues = offers.map(
-      ({title, description, type, sum, picture, userId}) =>
-        `('${title}', '${description}', '${type}', ${sum}, '${picture}', ${userId})`
+        ({title, description, type, sum, picture, userId}) =>
+          `('${title}', '${description}', '${type}', ${sum}, '${picture}', ${userId})`
     ).join(`,\n`);
 
     const offerCategoryValues = offerCategories.map(
-      ({offerId, categoryId}) =>
-        `(${offerId}, ${categoryId})`
+        ({offerId, categoryId}) =>
+          `(${offerId}, ${categoryId})`
     ).join(`,\n`);
 
     const commentValues = comments.map(
-      ({text, userId, offerId}) =>
-        `('${text}', ${userId}, ${offerId})`
+        ({text, userId, offerId}) =>
+          `('${text}', ${userId}, ${offerId})`
     ).join(`,\n`);
 
     const content = `
-      INSERT INTO users(email, password_hash, first_name, last_name, avatar) VALUES
+      INSERT INTO users(email, password_hash, first_name, last_name, avatar)
+      VALUES
       ${userValues};
 
-      INSERT INTO categories(name) VALUES
+      INSERT INTO categories(name)
+      VALUES
       ${categoryValues};
 
-      ALTER TABLE offers DISABLE TRIGGER ALL;
-      INSERT INTO offers(title, description, type, sum, picture, user_id) VALUES
+      ALTER TABLE offers
+        DISABLE TRIGGER ALL;
+      INSERT INTO offers(title, description, type, sum, picture, user_id)
+      VALUES
       ${offerValues};
-      ALTER TABLE offers ENABLE TRIGGER ALL;
+      ALTER TABLE offers
+        ENABLE TRIGGER ALL;
 
-      ALTER TABLE offer_categories DISABLE TRIGGER ALL;
-      INSERT INTO offer_categories(offer_id, category_id) VALUES
+      ALTER TABLE offer_categories
+        DISABLE TRIGGER ALL;
+      INSERT INTO offer_categories(offer_id, category_id)
+      VALUES
       ${offerCategoryValues};
-      ALTER TABLE offer_categories ENABLE TRIGGER ALL;
+      ALTER TABLE offer_categories
+        ENABLE TRIGGER ALL;
 
-      ALTER TABLE comments DISABLE TRIGGER ALL;
-      INSERT INTO COMMENTS(text, user_id, offer_id) VALUES
+      ALTER TABLE comments
+        DISABLE TRIGGER ALL;
+      INSERT INTO COMMENTS(text, user_id, offer_id)
+      VALUES
       ${commentValues};
-      ALTER TABLE comments ENABLE TRIGGER ALL;`;
+      ALTER TABLE comments
+        ENABLE TRIGGER ALL;`;
 
 
     try {

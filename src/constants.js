@@ -1,7 +1,5 @@
 'use strict';
 
-const path = require(`path`);
-
 const ExitCode = {
   SUCCESS: 0,
   ERROR: 1,
