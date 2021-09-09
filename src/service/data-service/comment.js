@@ -1,42 +1,39 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {extend} = require(`../../utils`);
-const {MAX_LENGTH_ID} = require(`../../constants`);
-
-class Comment {
-
-  findAll(offer) {
-    return offer.comments;
+class CommentService {
+  constructor(sequelize) {
+    // this._Offer = sequelize.models.Offer;
+    this._Comment = sequelize.models.Comment;
   }
 
-  findOne(id, offer) {
-    const comment = offer.comments.find((item) => item.id === id);
-
-    if (!comment) {
-      return null;
-    }
-    return comment;
+  async findAll(offerId) {
+    return await this._Comment.findAll({
+      where: {offerId},
+      raw: true
+    });
   }
 
-  create(comment, offer) {
-    const newComment = extend({id: nanoid(MAX_LENGTH_ID)}, comment);
-    offer.comments.push(newComment);
-
-    return newComment;
+  async findOne(offerId) {
+    return await this._Comment.findOne({
+      where: {offerId},
+      raw: true
+    });
   }
 
-  remove(id, offer) {
-    const [comment] = offer.comments.filter((item) => item.id === id);
+  async create(offerId, comment) {
+    return this._Comment.create({
+      offerId,
+      ...comment
+    });
+  }
 
-    if (!comment || comment.length === 0) {
-      return null;
-    }
+  async remove(id) {
+    const removedRows = await this._Comment.destroy({
+      where: {id}
+    });
 
-    offer.comments = offer.comments.filter((item) => item.id !== id);
-
-    return comment;
+    return !!removedRows;
   }
 }
 
-module.exports = Comment;
+module.exports = CommentService;

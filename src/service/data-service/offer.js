@@ -1,56 +1,63 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {MAX_LENGTH_ID} = require(`../../constants`);
-const {extend} = require(`../../utils`);
+const Aliase = require(`../models/aliase`);
 
-class Offer {
-  constructor(offers) {
-    this._offers = offers;
+class OfferService {
+  constructor(sequelize) {
+    this._Offer = sequelize.models.Offer;
+    this._Comment = sequelize.models.Comment;
   }
 
-  create(offer) {
-    const newOffer = extend({id: nanoid(MAX_LENGTH_ID), comments: []}, offer);
-    this._offers.push(newOffer);
+  async create(offerData) {
+    const offer = await this._Offer.create(offerData);
+    await offer.addCategories(offerData.categories);
 
-    return newOffer;
+    return offer.get();
   }
 
-  remove(id) {
-    const [offer] = this._offers.filter((item) => item.id === id);
+  async remove(id) {
+    const removedRows = await this._Offer.destroy({
+      where: {id}
+    });
 
-    if (!offer || offer.length === 0) {
-      return null;
+    return !!removedRows;
+  }
+
+  async findAll(needComments) {
+    const include = [Aliase.CATEGORIES];
+
+    if (needComments) {
+      include.push(Aliase.COMMENTS);
     }
 
-    this._offers = this._offers.filter((item) => item.id !== id);
+    const offers = await this._Offer.findAll({include});
 
+    return offers.map((offer) => offer.get());
+  }
+
+  async findOne(id) {
+
+    const offer = await this._Offer.findByPk(id, {
+      include: [
+        Aliase.CATEGORIES,
+        {
+          model: this._Comment,
+          as: Aliase.COMMENTS,
+          separate: true,
+        }
+      ]
+    });
     return offer;
   }
 
-  findAll() {
-    return this._offers;
-  }
+  async upDate(id, offer) {
+    const [affectedRows] = await this._Offer.update(offer, {
+      where: {id}
+    });
 
-  findOne(id) {
-    const offer = this._offers.find((item) => item.id === id);
-
-    if (!offer) {
-      return null;
-    }
-
-    return offer;
-  }
-
-  upDate(id, offer) {
-    const index = this._offers.findIndex((item) => item.id === id);
-    const upDatedOffer = extend(this._offers[index], offer);
-
-    this._offers = [...this._offers.slice(0, index), upDatedOffer, ...this._offers.slice(index + 1)];
-
-    return upDatedOffer;
+    return !!affectedRows;
   }
 
 }
 
-module.exports = Offer;
+module.exports = OfferService;

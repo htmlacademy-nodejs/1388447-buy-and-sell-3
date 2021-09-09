@@ -1,41 +1,25 @@
 'use strict';
 
-class Search {
-  constructor(offers) {
-    this._offers = offers;
+const {Op} = require(`sequelize`);
+const Aliase = require(`../models/aliase`);
+
+class SearchService {
+  constructor(sequelize) {
+    this._Offers = sequelize.models.Offer;
   }
 
-  findOffer(query) {
-    const resultByCategories = this.findByCategory(query);
-    const resultByDescription = this.findByDescription(query);
-    const resultByTitle = this.findByTitle(query);
+  async findAll(searchText) {
+    const offers = await this._Offers.findAll({
+      where: {
+        title: {
+          [Op.substring]: searchText
+        }
+      },
+      include: [Aliase.CATEGORIES],
+    });
 
-    return resultByCategories || resultByDescription || resultByTitle;
-  }
-
-  findByCategory(query) {
-    const offer = this._offers.find((item) => item.category.find((category) => category.includes(query)));
-    if (!offer) {
-      return null;
-    }
-    return offer;
-  }
-
-  findByDescription(query) {
-    const offer = this._offers.find((item) => item.description.includes(query));
-    if (!offer) {
-      return null;
-    }
-    return offer;
-  }
-
-  findByTitle(query) {
-    const offer = this._offers.find((item) => item.title.includes(query));
-    if (!offer) {
-      return null;
-    }
-    return offer;
+    return offers.map((offer) => offer.get());
   }
 }
 
-module.exports = Search;
+module.exports = SearchService;

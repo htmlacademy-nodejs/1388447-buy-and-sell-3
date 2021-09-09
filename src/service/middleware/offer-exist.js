@@ -1,9 +1,9 @@
 'use strict';
 const {HttpCode} = require(`../../constants`);
 
-module.exports = (service) => (req, res, next) => {
-  const {offerId} = req.params;
-  const offer = service.findOne(offerId);
+module.exports = (service) => async (req, res, next) => {
+  const {offerId, comments} = req.params;
+  const offer = await service.findOne(offerId, comments);
 
   if (!offer) {
     return res.status(HttpCode.NOT_FOUND)

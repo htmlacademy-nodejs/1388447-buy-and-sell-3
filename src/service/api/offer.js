@@ -5,100 +5,139 @@ const offerValidator = require(`../middleware/offer-validator`);
 const commentValidator = require(`../middleware/comment-validator`);
 const offerExist = require(`../middleware/offer-exist`);
 const {HttpCode} = require(`../../constants`);
-const {getLogger} = require(`../lib/logger`);
+// const {getLogger} = require(`../lib/logger`);
+const {logger} = require(`../lib/logger`);
 
 module.exports = (app, offerService, commentService) => {
   const router = new Router();
-  const logger = getLogger({name: `api/offers`});
+  // const logger = getLogger({name: `api/offers`});
 
-  app.use((req, res, next) => {
-    logger.debug(`Request on route ${req.url}`);
-    res.on(`finish`, () => {
-      logger.info(`Response status code ${res.statusCode}`);
-    });
-    next();
-  });
-  app.use((err, _req, _res, _next) => {
-    logger.error(`An error occurred on processing request: ${err.message}`);
-  });
+  // app.use((req, res, next) => {
+  //   logger.debug(`Request on route ${req.url}`);
+  //   res.on(`finish`, () => {
+  //     logger.info(`Response status code ${res.statusCode}`);
+  //   });
+  //   next();
+  // });
+  // app.use((err, _req, _res, _next) => {
+  //   logger.error(`An error occurred on processing request: ${err.message}`);
+  // });
   app.use(`/offers`, router);
-  app.use((req, res) => {
-    res.status(HttpCode.NOT_FOUND);
-    logger.error(`Route not found: ${req.url}`);
+  // app.use((req, res) => {
+  //   res.status(HttpCode.NOT_FOUND);
+  //   logger.error(`Route not found: ${req.url}`);
+  // });
+
+  router.get(`/`, async (req, res) => {
+    try {
+      const {comments} = req.query;
+      const offers = await offerService.findAll(comments);
+      res.status(HttpCode.OK).json(offers);
+
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    }
   });
 
-  router.get(`/`, (req, res) => {
-    res.status(HttpCode.OK).json(offerService.findAll());
+  router.get(`/:offerId`, offerExist(offerService), async (req, res) => {
+    try {
+      const {offer} = res.locals;
+
+      if (!offer) {
+        const {offerId} = req.params;
+
+        res.status(HttpCode.NOT_FOUND)
+          .send(`Not found with ${offerId}`);
+      } else {
+        res.status(HttpCode.OK).json(offer);
+      }
+
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    }
   });
 
-  router.get(`/:offerId`, offerExist(offerService), (req, res) => {
-    const {offer} = res.locals;
+  router.post(`/`, offerValidator, async (req, res) => {
+    try {
+      const offer = await offerService.create(req.body);
 
-    if (!offer) {
+      res.status(HttpCode.CREATED)
+        .json(offer);
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    }
+  });
+
+  router.put(`/:offerId`, [offerValidator, offerExist(offerService)], async (req, res) => {
+    try {
       const {offerId} = req.params;
+      const offer = await offerService.upDate(offerId, req.body);
 
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${offerId}`);
+      res.status(HttpCode.OK)
+        .json(offer);
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
     }
-    return res.status(HttpCode.OK).json(offer);
   });
 
-  router.post(`/`, offerValidator, (req, res) => {
-    const offer = offerService.create(req.body);
+  router.delete(`/:offerId`, async (req, res) => {
+    try {
+      const {offerId} = req.params;
+      const offer = await offerService.remove(offerId);
 
-    res.status(HttpCode.CREATED)
-      .json(offer);
-  });
+      if (!offer) {
+        res.status(HttpCode.NOT_FOUND)
+          .send(`Not found offer with ${offerId} to remove`);
+      } else {
+        res.status(HttpCode.OK)
+          .json(offer);
+      }
 
-  router.put(`/:offerId`, [offerValidator, offerExist(offerService)], (req, res) => {
-    const {offerId} = req.params;
-    const offer = offerService.upDate(offerId, req.body);
-
-    res.status(HttpCode.OK)
-      .json(offer);
-  });
-
-  router.delete(`/:offerId`, (req, res) => {
-    const {offerId} = req.params;
-    const offer = offerService.remove(offerId);
-
-    if (!offer) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found offer with ${offerId} to remove`);
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
     }
-
-    return res.status(HttpCode.OK)
-      .json(offer);
   });
 
-  router.get(`/:offerId/comments`, offerExist(offerService), (req, res) => {
-    const {offer} = res.locals;
+  router.get(`/:offerId/comments`, offerExist(offerService), async (req, res) => {
+    try {
+      const {offer} = res.locals;
 
-    const comments = commentService.findAll(offer);
+      const comments = await commentService.findAll(offer.id);
 
-    res.status(HttpCode.OK)
-      .json(comments);
-  });
-
-  router.delete(`/:offersId/comments/:commentId`, offerExist(offerService), (req, res) => {
-    const {offer} = res.locals;
-    const {commentId} = req.params;
-    const comment = commentService.remove(commentId, offer);
-
-    if (!comment) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found comment with ${commentId} to remove`);
+      res.status(HttpCode.OK)
+        .json(comments);
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
     }
-
-    return res.status(HttpCode.OK)
-      .json(comment);
   });
 
-  router.post(`/:offerId/comments`, [offerExist(offerService), commentValidator], (req, res) => {
-    const {offer} = res.locals;
-    const comment = commentService.create(req.body, offer);
+  router.delete(`/:offersId/comments/:commentId`, offerExist(offerService), async (req, res) => {
+    try {
+      const {commentId} = req.params;
+      const comment = await commentService.remove(commentId);
 
-    res.status(HttpCode.OK)
-      .json(comment);
+      if (!comment) {
+        res.status(HttpCode.NOT_FOUND)
+          .send(`Not found comment with ${commentId} to remove`);
+      } else {
+        res.status(HttpCode.OK)
+          .json(comment);
+      }
+
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    }
+  });
+
+  router.post(`/:offerId/comments`, [offerExist(offerService), commentValidator], async (req, res) => {
+    try {
+      const {offer} = res.locals;
+      const comment = await commentService.create(offer.id, req.body);
+
+      res.status(HttpCode.OK)
+        .json(comment);
+    } catch (err) {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    }
   });
 };
