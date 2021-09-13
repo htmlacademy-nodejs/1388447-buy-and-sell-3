@@ -6,7 +6,7 @@ const Aliase = require(`../models/aliase`);
 class CategoryService {
   constructor(sequelize) {
     this._Category = sequelize.models.Category;
-    this.OfferCategories = sequelize.models.OfferCategories;
+    // this._OfferCategories = sequelize.models.OfferCategories;
   }
 
   async findAll(needCount) {
@@ -24,11 +24,11 @@ class CategoryService {
           ]
         ],
         group: [Sequelize.col(`Category.id`)],
-        include: [{
-          model: this.OfferCategories,
-          as: Aliase.OFFER_CATEGORIES,
-          attributes: []
-        }]
+        // include: [{
+        //   model: this._OfferCategories,
+        //   as: Aliase.OFFER_CATEGORIES,
+        //   attributes: []
+        // }]
       });
       return result.map((it) => it.get());
     } else {
