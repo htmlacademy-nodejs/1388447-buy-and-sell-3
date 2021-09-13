@@ -3,16 +3,23 @@
 const express = require(`express`);
 const request = require(`supertest`);
 const search = require(`./search`);
+const Sequelize = require(`sequelize`);
+const initDB = require(`../lib/init-db`);
 const DataService = require(`../data-service/search`);
 const {HttpCode} = require(`../../constants`);
 
-const mockData = [
+const mockCategories = [
+  `Книги`,
+  `Цветы`,
+  `Животные`,
+  `Разное`
+];
+
+const mockOffers = [
   {
-    "id": `v2O83t`,
-    "category": [
+    "categories": [
       `Животные`,
-      `Книги`,
-      `Журналы`
+      `Разное`
     ],
     "description": `Даю недельную гарантию. Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города. Продаю с болью в сердце...`,
     "picture": `item07.jpg`,
@@ -21,21 +28,26 @@ const mockData = [
     "sum": 43399,
     "comments": [
       {
-        "id": `eHLMYT`,
         "text": `С чем связана продажа? Почему так дешёво? Неплохо но дорого Совсем немного... Вы что?! В магазине дешевле.`
       }
     ]
   }
 ];
 
+const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
+const app = express();
+app.use(express.json());
+
+beforeAll(async () => {
+  await initDB(mockDB, {categories: mockCategories, offers: mockOffers});
+  search(app, new DataService(mockDB));
+});
+
 describe(`API returns offer based on search query`, () => {
 
   let response;
 
   beforeAll(async () => {
-    const app = express();
-    app.use(express.json());
-    search(app, new DataService(mockData));
     response = await request(app)
       .get(`/search`)
       .query({query: `Продам`});
@@ -43,16 +55,13 @@ describe(`API returns offer based on search query`, () => {
 
   test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
 
-  test(`1 offer found`, () => expect(response.body).toEqual(mockData[0]));
+  test(`1 offer found`, () => expect(response.body.length).toBe(1));
 
-  test(`Offer has correct id`, () => expect(response.body.id).toBe(`v2O83t`));
+  test(`Offer has correct title`, () => expect(response.body[0].title).toBe(`Продам отличную подборку фильмов на VHS.`));
 
 });
 
 describe(`API returns offer based on search query`, () => {
-  const app = express();
-  app.use(express.json());
-  search(app, new DataService(mockData));
 
   test(`API return code 404 if nothing is found`, () => {
     return request(app)

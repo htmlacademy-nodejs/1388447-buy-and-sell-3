@@ -1,11 +1,14 @@
 "use strict";
 
+const {Model} = require(`sequelize`);
 const defineCategory = require(`./category`);
 const defineComment = require(`./comment`);
 const defineOffer = require(`./offer`);
 const Aliase = require(`./aliase`);
-const {Model} = require(`sequelize`);
 
+class OfferCategory extends Model {
+
+}
 
 const define = (sequelize) => {
   const Category = defineCategory(sequelize);
@@ -15,16 +18,14 @@ const define = (sequelize) => {
   Offer.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `offerId`});
   Comment.belongsTo(Offer, {foreignKey: `offerId`});
 
-  class OfferCategories extends Model {
-  }
+  OfferCategory.init({}, {sequelize});
 
-  OfferCategories.init({}, {sequelize});
+  Offer.belongsToMany(Category, {through: OfferCategory, as: Aliase.CATEGORIES});
+  Category.belongsToMany(Offer, {through: OfferCategory, as: Aliase.OFFERS});
+  Category.hasMany(OfferCategory, {as: Aliase.OFFER_CATEGORIES});
 
-  Offer.belongsToMany(Category, {through: OfferCategories, as: Aliase.CATEGORIES});
-  Category.belongsToMany(Offer, {through: OfferCategories, as: Aliase.OFFERS});
-  Category.hasMany(OfferCategories, {as: Aliase.OFFER_CATEGORIES});
-
-  return {Category, Comment, Offer, OfferCategories};
+  return {Category, Comment, Offer, OfferCategory};
 };
 
 module.exports = define;
+

@@ -10,8 +10,8 @@ class OfferService {
 
   async create(offerData) {
     const offer = await this._Offer.create(offerData);
-    await offer.addCategories(offerData.categories);
-
+    const categoryIds = offerData.categories.map((id) => +id);
+    await offer.addCategories(categoryIds);
     return offer.get();
   }
 

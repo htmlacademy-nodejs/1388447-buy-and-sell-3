@@ -2,16 +2,22 @@
 
 const express = require(`express`);
 const request = require(`supertest`);
+const Sequelize = require(`sequelize`);
+const initDB = require(`../lib/init-db`);
 const DataService = require(`../data-service/category`);
 const category = require(`./category`);
 const {HttpCode} = require(`../../constants`);
 
-const mockData = [
+const mockCategories = [
+  `Животные`,
+  `Журналы`,
+  `Игры`
+];
+
+const mockOffers = [
   {
-    "id": `v2O83t`,
-    "category": [
+    "categories": [
       `Животные`,
-      `Книги`,
       `Журналы`
     ],
     "description": `Даю недельную гарантию. Если найдёте дешевле — сброшу цену. При покупке с меня бесплатная доставка в черте города. Продаю с болью в сердце...`,
@@ -21,21 +27,26 @@ const mockData = [
     "sum": 43399,
     "comments": [
       {
-        "id": `eHLMYT`,
         "text": `С чем связана продажа? Почему так дешёво? Неплохо но дорого Совсем немного... Вы что?! В магазине дешевле.`
       }
     ]
   }
 ];
 
+const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
+const app = express();
+app.use(express.json());
+
+beforeAll(async () => {
+  await initDB(mockDB, {categories: mockCategories, offers: mockOffers});
+  category(app, new DataService(mockDB));
+});
+
 describe(`API returns category list`, () => {
 
   let response;
 
   beforeAll(async () => {
-    const app = express();
-    app.use(express.json());
-    category(app, new DataService(mockData));
     response = await request(app)
       .get(`/categories`);
   });
@@ -45,10 +56,10 @@ describe(`API returns category list`, () => {
   test(`Returns list of 3 categories`, () => expect(response.body.length).toBe(3));
 
   test(`Category names are 'Животные', 'Книги', 'Журналы'`, () => {
-    return expect(response.body).toEqual(expect.arrayContaining([
+    return expect(response.body.map((it) => it.name)).toEqual(expect.arrayContaining([
       `Животные`,
-      `Книги`,
       `Журналы`,
+      `Игры`
     ]));
   });
 });
