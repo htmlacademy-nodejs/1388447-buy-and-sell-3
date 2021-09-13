@@ -15,7 +15,6 @@ offersRoutes.get(`/:id`, async (req, res) => {
   try {
     const {id} = req.params;
     const offer = await api.getOffer(id, true);
-    console.log(`offer`, offer);
     res.render(`offers/ticket`, {offer});
 
   } catch (err) {
