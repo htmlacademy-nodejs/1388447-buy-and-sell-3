@@ -14,9 +14,16 @@ module.exports = (app, offerService, commentService) => {
 
   router.get(`/`, async (req, res) => {
     try {
-      const {comments} = req.query;
-      const offers = await offerService.findAll(comments);
-      res.status(HttpCode.OK).json(offers);
+      const {offset, limit, comments} = req.query;
+      let result;
+
+      if (limit || offset) {
+        result = await offerService.findPage({limit, offset});
+      } else {
+        result = await offerService.findAll(comments);
+      }
+
+      res.status(HttpCode.OK).json(result);
 
     } catch (err) {
       logger.error(`An error occurred on processing request: ${err.message}`);
